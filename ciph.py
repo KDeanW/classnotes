@@ -8,6 +8,8 @@ book=(str(open('diction.txt').read()).lower()).replace('\n','|')
 global clean
 clean=''
 dir=0,1,-1
+one=1,'1'
+two=2,'2'
 def cabbage_bag():
   mouth=''
   al=0
@@ -18,11 +20,12 @@ def cabbage_bag():
     bet=pha
     pha=al
     al=pha+bet
+    #print[face[cy[i]]]
     while cy[i]<0:
       cy[i]=cy[i]+len(face)
     inte= str(mouth.count(face[cy[i]])).replace('0','')
     letter=face[cy[i]]
-    cy[i]=letter+inte
+    cy[i]=str(letter)+inte
     mouth=mouth+cy[i]
 
 def caesar(shift):
@@ -50,7 +53,7 @@ def Vigenère(read,way,vigen):
     else:
       acfr=acfr+1
   return ''.join(read)
-def binary(rad,way,bacon=False):
+def ASCII(rad,way,bacon=False):
   nary=[]
   read=str(rad)
   if way==1:
@@ -69,9 +72,14 @@ def binary(rad,way,bacon=False):
         read=read.replace('a','0').replace('b','1')
       bary=''.join(chr(int(read[i*8:i*8+8],2)) for i in range(len(read)//8))
     else:
-      bary='nonbinary/nonbacon'
+      bary='nonASCII/nonbacon'
   return bary
+def txt(txt):
+  if '.txt'in txt:
+    txt=str(open(txt).read())
+  return txt
 def scribe(read,way):
+  read=txt(read)
   cap=list(read)
   read=list(read.lower())
   i=0
@@ -81,11 +89,11 @@ def scribe(read,way):
       read.pop(i+1)
       cap.pop(i+1)
     i=i+1
-  if way=='1':        #encryption
+  if way in one:        #encryption
     for i in range(len(read)):
       if read[i] in face:
         read[i]=(str(cy[face.index(read[i])]))
-  elif way=='2':      #decryption
+  elif way in two:      #decryption
     for i in range(len(read)):
       if read[i] in cy:
         read[i]=(str(face[cy.index(read[i])]))
@@ -99,11 +107,11 @@ def handle(wat,read,way):
   elif wat=='2':
     caesar(int(input('what is the shift value\n')))
   elif wat=='3':
-    return Vigenère(read,dir[int(way)],input('what is the cipher key\n').lower())
+    return Vigenère(read,dir[int(way)],txt(input('what is the cipher key\n')).lower())
   elif wat=='4':
-    return binary(read,dir[int(way)])
+    return ASCII(read,dir[int(way)])
   elif wat=='5':
-    return binary(read,dir[int(way)],True)
+    return ASCII(read,dir[int(way)],True)
   return scribe(read,way)
 '''   uncomment to test ciphers | All=It's Working '''
 #print(handle('1',"Ny2'i R1b4ghnoy",2))
@@ -111,7 +119,6 @@ def handle(wat,read,way):
 #print(handle('3',"Bx'k Pweqbry",2)) #key=Testingtest
 #print(handle('4','010010010111010000100111011100110010000001010111011011110111001001101011011010010110111001100111',2))
 #print(handle('5','abaabaababbbabaaaabaabbbabbbaabbaabaaaaaabababbbabbabbbbabbbaabaabbababbabbabaababbabbbaabbaabbb',2))
-
 def verify(written, shift=None):
   global clean
   ac=0
@@ -154,8 +161,8 @@ def force(unread):
     caesar(i)
     verify(scribe(unread,'2'),label )
   clean=''
-  print('Binary/Bacons Cipher:')
-  verify(binary(unread,-1,True))
+  print('ASCII/Bacons Cipher:')
+  verify(ASCII(unread,-1,True))
   clean=''
   if len(unread)<9:
     start=time.time()
